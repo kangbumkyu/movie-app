@@ -10,11 +10,11 @@ const Box = styled(motion.div)<{ image: string }>`
   background-image: url(${(props) => props.image});
   background-size: cover;
   background-position: center;
-  &:first-child {
-    transform-origin: center left;
-  }
   &:last-child {
     transform-origin: center right;
+  }
+  &:first-child {
+    transform-origin: center left;
   }
   cursor: pointer;
 `;
@@ -61,6 +61,7 @@ function ThumbnailBox({ data }: IThumbnailBoxProps) {
   const isMovie = "title" in data ? true : false;
   const navigate = useNavigate();
   const onBoxClicked = (id: number) => {
+    document.body.style.overflow = "hidden";
     navigate(`/${isMovie ? "movies" : "tvs"}/${id}`);
   };
   return (

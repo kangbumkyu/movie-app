@@ -45,7 +45,7 @@ function MovieDetailBox({ match, clickedItem }: IDetailBox) {
   const { scrollY } = useViewportScroll();
 
   return (
-    <Container style={{ top: scrollY }} layoutId={match.params.id}>
+    <Container style={{ top: scrollY.get() + 100 }} layoutId={match.params.id}>
       {clickedItem && (
         <>
           <DetailCover

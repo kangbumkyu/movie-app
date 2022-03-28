@@ -57,7 +57,7 @@ interface ISliderProps {
 function Slider({ data }: ISliderProps) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
-  const [direction, setDirection] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1);
 
   const increaseIndex = () => {
     if (data) {

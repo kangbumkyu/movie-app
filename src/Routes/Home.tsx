@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  overflow-x: hidden;
   /* height: 150vh; */
 `;
 
@@ -38,7 +39,10 @@ function Home() {
   const navigate = useNavigate();
   const match = useMatch("/movies/:id");
 
-  const overlayClicked = () => navigate(-1);
+  const overlayClicked = () => {
+    document.body.style.overflow = "scroll";
+    navigate(-1);
+  };
   const clickedMovie =
     match &&
     nowPlaying.data?.results.find(
