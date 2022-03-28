@@ -90,18 +90,6 @@ const Input = styled(motion.input)`
   }
 `;
 
-const logoVariants = {
-  normal: {
-    fillOpacity: 1,
-  },
-  active: {
-    fillOpacity: [1, 0.5, 1, 0, 1],
-    transition: {
-      repeat: Infinity,
-    },
-  },
-};
-
 const navVariants = {
   top: { backgroundColor: "rgba(0, 0, 0, 0)" },
   scroll: { backgroundColor: "rgba(0, 0, 0, 1)" },
@@ -136,7 +124,6 @@ function Header() {
     <Nav variants={navVariants} animate={navAnimation} initial="top">
       <Col>
         <Logo
-          variants={logoVariants}
           whileHover="active"
           initial="normal"
           xmlns="http://www.w3.org/2000/svg"
