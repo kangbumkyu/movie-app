@@ -105,7 +105,7 @@ function Header() {
   const { scrollY } = useViewportScroll();
   const navAnimation = useAnimation();
   const homeMatch = useMatch("/");
-  const tvMatch = useMatch("/tv");
+  const tvMatch = useMatch("/tvs");
 
   useEffect(() => {
     scrollY.onChange(() => {
@@ -136,11 +136,11 @@ function Header() {
         <Items>
           <Item>
             <Link to="/">
-              Home {homeMatch && <Circle layoutId="underline" />}
+              Movies {homeMatch && <Circle layoutId="underline" />}
             </Link>
           </Item>
           <Item>
-            <Link to="/tv">
+            <Link to="/tvs">
               TV Shows {tvMatch && <Circle layoutId="underline" />}
             </Link>
           </Item>

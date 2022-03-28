@@ -2,13 +2,12 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { getImagePath } from "../utils";
 import { useNavigate } from "react-router-dom";
-import { IMovie } from "../api";
-import React from "react";
+import { IMovie, ITv } from "../api";
 
-const Box = styled(motion.div)<{ posterImage: string }>`
+const Box = styled(motion.div)<{ image: string }>`
   background-color: white;
   height: 150px;
-  background-image: url(${(props) => props.posterImage});
+  background-image: url(${(props) => props.image});
   background-size: cover;
   background-position: center;
   &:first-child {
@@ -55,26 +54,29 @@ const infoVariants = {
 };
 
 interface IThumbnailBoxProps {
-  movie: IMovie;
+  data: IMovie | ITv;
 }
 
-function ThumbnailBox({ movie }: IThumbnailBoxProps) {
+function ThumbnailBox({ data }: IThumbnailBoxProps) {
+  const isMovie = "title" in data ? true : false;
   const navigate = useNavigate();
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+  const onBoxClicked = (id: number) => {
+    navigate(`/${isMovie ? "movies" : "tvs"}/${id}`);
   };
   return (
     <Box
-      key={movie.id}
-      layoutId={movie.id + ""}
-      posterImage={getImagePath(movie.poster_path, "w200")}
+      key={data?.id}
+      layoutId={data?.id + ""}
+      image={getImagePath(data?.poster_path || "", "w200")}
       variants={scaleVariants}
       transition={{ type: "tween" }}
       whileHover="hover"
       initial="normal"
-      onClick={() => onBoxClicked(movie.id)}
+      onClick={() => onBoxClicked(data?.id || 0)}
     >
-      <Info variants={infoVariants}>{movie.title}</Info>
+      <Info variants={infoVariants}>
+        {"title" in data ? data.title : data.name}
+      </Info>
     </Box>
   );
 }

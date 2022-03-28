@@ -1,12 +1,13 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
-import { getImagePath } from "../utils";
+import { getMovies, getPopularMovies, IGetMoviesResult } from "../api";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate, useMatch } from "react-router-dom";
 import Slider from "../Components/Slider";
-import MovieDetailBox from "../Components/MovieDetailBox";
+import DetailBox from "../Components/DetailBox";
 import Overlay from "../Components/Overlay";
+import Banner from "../Components/Banner";
+import Section from "../Components/Section";
 
 const Wrapper = styled.div`
   background: black;
@@ -23,54 +24,46 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgImage: string }>`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(${(props) => props.bgImage});
-  background-size: cover;
-`;
-const Title = styled.h2`
-  font-size: 64px;
-  margin-bottom: 20px;
-`;
-const Overview = styled.p`
-  width: 50%;
-`;
-
 function Home() {
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
+  const nowPlaying = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
 
+  // const popularMovies = useQuery<IGetMoviesResult>(
+  //   ["popularMovies", "popular"],
+  //   getPopularMovies
+  // );
+
   const navigate = useNavigate();
-  const match = useMatch("/movies/:movieId");
+  const match = useMatch("/movies/:id");
 
   const overlayClicked = () => navigate(-1);
   const clickedMovie =
     match &&
-    data?.results.find((movie) => String(movie.id) === match.params.movieId);
+    nowPlaying.data?.results.find(
+      (movie) => String(movie.id) === match.params.id
+    );
 
   return (
     <Wrapper>
-      {isLoading ? (
+      {nowPlaying.isLoading ? (
         <Loader>Loading ... </Loader>
       ) : (
         <>
-          <Banner bgImage={getImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
-          </Banner>
-          <Slider data={data} />
+          <Banner data={nowPlaying.data} />
+          <Section title="Now Playing">
+            <Slider data={nowPlaying.data} />
+          </Section>
+          {/* <Section>
+            <SectionTitle>Popular</SectionTitle>
+            <Slider data={popularMovies.data} />
+          </Section> */}
           <AnimatePresence>
             {match && (
               <>
                 <Overlay overlayClicked={overlayClicked} />
-                <MovieDetailBox match={match} clickedMovie={clickedMovie} />
+                <DetailBox match={match} clickedItem={clickedMovie} />
               </>
             )}
           </AnimatePresence>
