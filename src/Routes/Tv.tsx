@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getPopularTvs, IGetTvsResult } from "../api";
 import { AnimatePresence } from "framer-motion";
-import { useNavigate, useMatch } from "react-router-dom";
+import { useNavigate, useMatch, useLocation } from "react-router-dom";
 import Slider from "../Components/Slider";
 import DetailBox from "../Components/DetailBox";
 import Overlay from "../Components/Overlay";
@@ -24,6 +24,10 @@ const Loader = styled.div`
   align-items: center;
 `;
 
+interface ILocationType {
+  category: string;
+}
+
 function Tv() {
   const popularTvs = useQuery<IGetTvsResult>(
     ["popularTvs", "popular"],
@@ -31,12 +35,22 @@ function Tv() {
   );
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as ILocationType;
   const match = useMatch("/tvs/:id");
 
-  const overlayClicked = () => navigate(-1);
-  const clickedTv =
-    match &&
-    popularTvs.data?.results.find((tv) => String(tv.id) === match.params.id);
+  const overlayClicked = () => {
+    document.body.style.overflow = "scroll";
+    navigate(-1);
+  };
+  let clickedTv;
+  if (state !== null && match) {
+    if (state.category === "popular") {
+      clickedTv = popularTvs.data?.results.find(
+        (tv) => String(tv.id) === match.params.id
+      );
+    }
+  }
 
   return (
     <Wrapper>
@@ -45,18 +59,18 @@ function Tv() {
       ) : (
         <>
           <Banner data={popularTvs.data} />
-          <Section title="Now Playing">
-            <Slider data={popularTvs.data} />
+          <Section title="Popular">
+            <Slider data={popularTvs.data} category="popular" />
           </Section>
-          {/* <Section>
-            <SectionTitle>Popular</SectionTitle>
-            <Slider data={popularMovies.data} />
-          </Section> */}
           <AnimatePresence>
             {match && (
               <>
                 <Overlay overlayClicked={overlayClicked} />
-                <DetailBox match={match} clickedItem={clickedTv} />
+                <DetailBox
+                  match={match}
+                  clickedItem={clickedTv}
+                  category={state.category}
+                />
               </>
             )}
           </AnimatePresence>

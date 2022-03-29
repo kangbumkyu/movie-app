@@ -39,13 +39,16 @@ const DetailOverview = styled.p`
 interface IDetailBox {
   match: PathMatch;
   clickedItem?: IMovie | ITv | null | undefined;
+  category: string;
 }
 
-function MovieDetailBox({ match, clickedItem }: IDetailBox) {
+function MovieDetailBox({ match, clickedItem, category }: IDetailBox) {
   const { scrollY } = useViewportScroll();
-
   return (
-    <Container style={{ top: scrollY.get() + 100 }} layoutId={match.params.id}>
+    <Container
+      style={{ top: scrollY.get() + 100 }}
+      layoutId={match.params.id + category}
+    >
       {clickedItem && (
         <>
           <DetailCover

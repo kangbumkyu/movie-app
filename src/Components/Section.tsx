@@ -7,6 +7,7 @@ const Container = styled.div`
   position: relative;
   top: -100px;
   padding: 0 10px;
+  margin: 50px 0;
   /* margin-bottom: 100px; */
 `;
 

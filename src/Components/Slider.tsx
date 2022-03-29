@@ -52,9 +52,10 @@ const rowVariants = {
 
 interface ISliderProps {
   data?: IGetMoviesResult | IGetTvsResult;
+  category: string;
 }
 
-function Slider({ data }: ISliderProps) {
+function Slider({ data, category }: ISliderProps) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [direction, setDirection] = useState<number>(1);
@@ -99,7 +100,11 @@ function Slider({ data }: ISliderProps) {
             .slice(1)
             .slice(OFFSET * index, OFFSET * index + OFFSET)
             .map((item) => (
-              <ThumbnailBox key={item.id} data={item}></ThumbnailBox>
+              <ThumbnailBox
+                key={item.id}
+                category={category}
+                data={item}
+              ></ThumbnailBox>
             ))}
         </Row>
       </AnimatePresence>

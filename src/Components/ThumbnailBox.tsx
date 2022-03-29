@@ -55,19 +55,20 @@ const infoVariants = {
 
 interface IThumbnailBoxProps {
   data: IMovie | ITv;
+  category: string;
 }
 
-function ThumbnailBox({ data }: IThumbnailBoxProps) {
+function ThumbnailBox({ data, category }: IThumbnailBoxProps) {
   const isMovie = "title" in data ? true : false;
   const navigate = useNavigate();
   const onBoxClicked = (id: number) => {
     document.body.style.overflow = "hidden";
-    navigate(`/${isMovie ? "movies" : "tvs"}/${id}`);
+    navigate(`/${isMovie ? "movies" : "tvs"}/${id}`, { state: { category } });
   };
   return (
     <Box
       key={data?.id}
-      layoutId={data?.id + ""}
+      layoutId={data?.id + "" + category}
       image={getImagePath(data?.poster_path || "", "w200")}
       variants={scaleVariants}
       transition={{ type: "tween" }}
